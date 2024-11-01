@@ -2,14 +2,16 @@ import random
 import asyncio
 
 from src.peeler.messaging import send_message
-from src.peeler.weighing import weigh_apple, weigh_peel, weigh_orange, weigh_zest
+from src.peeler.weighing import weigh_apple, weigh_fast_peel, weigh_thorough_peel, weigh_orange, weigh_fast_zest, weigh_thorough_zest
 from src.peeler.cleaning import clean
 
 processing_event = asyncio.Event()
+peeling_mode_queue = asyncio.Queue()
 
 async def start_processing() -> None:
     print("Starting processing")
     processing_event.set()
+    await peeling_mode_queue.put("thorough")
     asyncio.create_task(clean_every_thirty_seconds())
     while processing_event.is_set():
         await process_cycle()
@@ -30,22 +32,50 @@ async def process_cycle() -> None:
         await idle()
     else:
         is_apple = random.choice([True, False])
+        peeling_mode = await peeling_mode_queue.get()
+        peeling_mode_queue.put_nowait(peeling_mode)
         if is_apple:
-            await peel()
+            if peeling_mode == "fast":
+                await fast_peel()
+            else:
+                await thorough_peel()
         else:
-            await zest()
+            if peeling_mode == "fast":
+                await fast_zest()
+            else:
+                await thorough_zest()
     return
 
-async def peel() -> None:
+async def go_fast() -> None:
+    await peeling_mode_queue.put("fast")
+    print("Switched to fast peeling mode")
+
+async def go_thorough() -> None:
+    await peeling_mode_queue.put("thorough")
+    print("Switched to thorough peeling mode")
+
+async def fast_peel() -> None:
     await asyncio.sleep(1)
     weigh_apple()
-    weigh_peel()
+    weigh_fast_peel()
     print("Peeling an apple")
 
-async def zest() -> None:
+async def thorough_peel() -> None:
+    await asyncio.sleep(1.5)
+    weigh_apple()
+    weigh_thorough_peel()
+    print("Peeling an apple")
+
+async def fast_zest() -> None:
     await asyncio.sleep(2)
     weigh_orange()
-    weigh_zest()
+    weigh_fast_zest()
+    print("Zesting an orange")
+
+async def thorough_zest() -> None:
+    await asyncio.sleep(2.7)
+    weigh_orange()
+    weigh_thorough_zest()
     print("Zesting an orange")
 
 async def clean_every_thirty_seconds() -> None:

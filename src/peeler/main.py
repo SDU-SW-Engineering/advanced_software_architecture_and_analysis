@@ -1,7 +1,6 @@
 import asyncio
 from src.peeler.messaging import send_message
-from src.peeler.processing import start_processing, stop_processing
-import random
+from src.peeler.processing import start_processing, stop_processing, go_thorough
 
 async def turn_on() -> None:
     send_message("Turning on the device")
@@ -13,7 +12,9 @@ async def turn_off() -> None:
 
 async def main() -> None:
     task = asyncio.create_task(start_processing())
-    await asyncio.sleep(10)
+    await asyncio.sleep(5)
+    await go_thorough()
+    await asyncio.sleep(5)
     await stop_processing()
     await task
 
