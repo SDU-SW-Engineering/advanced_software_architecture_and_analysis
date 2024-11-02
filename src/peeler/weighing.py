@@ -1,31 +1,49 @@
 import random
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
-def weigh_apple() -> None:
+cluster = MongoClient("mongodb+srv://admin:admin123@cluster0.k0olb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+db= cluster["peeling_system"]
+collection= db["peeling"]
+
+def weigh_apple() :
     weight = random.uniform(150, 300)
     print(f"Weighing an apple: {weight:.2f} grams")
-    return
+    return weight
 
 def weigh_fast_peel() -> None:
     weight = random.uniform(10, 35)
-    print(f"Weighing a peel: {weight:.2f} grams")
+    apple_weight = weigh_apple()
+    print(f"Weighing a peel: {weight:.2f} grams, Weighing an apple: {apple_weight()} grams")
+    resource = {"name": "apple", "weight": apple_weight, "waste_weight": weight}
+    collection.insert_one(resource)
     return
 
 def weigh_thorough_peel() -> None:
     weight = random.uniform(20, 50)
-    print(f"Weighing a peel: {weight:.2f} grams")
+    apple_weight = weigh_apple()
+    print(f"Weighing a peel: {weight:.2f} grams, Weighing an apple: {apple_weight} grams")
+    resource = {"name": "apple", "weight": apple_weight, "waste_weight": weight}
+    collection.insert_one(resource)
     return
 
-def weigh_orange() -> None:
+def weigh_orange():
     weight = random.uniform(200, 400)
     print(f"Weighing an orange: {weight:.2f} grams")
-    return
+    return weight
 
 def weigh_fast_zest() -> None:
     weight = random.uniform(5, 15)
-    print(f"Weighing a zest: {weight:.2f} grams")
+    orange_weight = weigh_orange()
+    print(f"Weighing a zest: {weight:.2f} grams, weighing an apple: {orange_weight} grams")
+    resource = {"name": "orange", "weight": orange_weight, "waste_weight": weight}
+    collection.insert_one(resource)
     return
 
 def weigh_thorough_zest() -> None:
     weight = random.uniform(10, 25)
-    print(f"Weighing a zest: {weight:.2f} grams")
+    orange_weight = weigh_orange()
+    print(f"Weighing a zest: {weight:.2f} grams, weighing an apple: {orange_weight} grams")
+    resource = {"name": "orange", "weight": orange_weight, "waste_weight": weight}
+    collection.insert_one(resource)
     return
