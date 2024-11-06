@@ -8,7 +8,6 @@ collection= db["peeling"]
 
 def weigh_apple() :
     weight = random.uniform(150, 300)
-    print(f"Weighing an apple: {weight:.2f} grams")
     return weight
 
 def weigh_fast_peel() -> None:
@@ -29,7 +28,6 @@ def weigh_thorough_peel() -> None:
 
 def weigh_orange():
     weight = random.uniform(200, 400)
-    print(f"Weighing an orange: {weight:.2f} grams")
     return weight
 
 def weigh_fast_zest() -> None:
