@@ -12,6 +12,6 @@ public class Main {
     public static void main(String[] args) {
         Subsystem peeler = new Subsystem(SubsystemType.PEELER);
 
-        MessageHandler.handleMessage("New message from Jakub");
+        Message.handleMessage("New message from Jakub");
     }
 }
