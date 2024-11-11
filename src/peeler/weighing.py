@@ -45,3 +45,4 @@ def weigh_thorough_zest() -> None:
     resource = {"name": "orange", "weight": orange_weight, "waste_weight": weight}
     collection.insert_one(resource)
     return
+    

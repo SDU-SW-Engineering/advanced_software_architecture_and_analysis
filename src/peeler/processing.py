@@ -1,9 +1,9 @@
 import random
 import asyncio
 
-from src.peeler.messaging import send_message
-from src.peeler.weighing import weigh_apple, weigh_fast_peel, weigh_thorough_peel, weigh_orange, weigh_fast_zest, weigh_thorough_zest
-from src.peeler.cleaning import clean
+from messaging import send_message
+from weighing import weigh_apple, weigh_fast_peel, weigh_thorough_peel, weigh_orange, weigh_fast_zest, weigh_thorough_zest
+from cleaning import clean
 
 processing_event = asyncio.Event()
 peeling_mode_queue = asyncio.Queue()
@@ -88,3 +88,4 @@ async def idle() -> None:
     time = random.randint(1, 5)
     await asyncio.sleep(time)
     print(f"This device was idle for {time} seconds")
+    
