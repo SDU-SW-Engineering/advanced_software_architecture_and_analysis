@@ -426,7 +426,7 @@ replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,java
 .DS_Store
-*.idea/
+.idea/
 
 # .gitignore for maven from https://github.com/github/gitignore/blob/main/Maven.gitignore
 target/
