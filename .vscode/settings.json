@@ -17,4 +17,5 @@
       "report/ReflectionsTemplate/*.tex",
     ],
   },
+  "java.configuration.updateBuildConfiguration": "interactive",
 }
