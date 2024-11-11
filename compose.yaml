@@ -1,0 +1,42 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672 # service
+      - 15672:15672 # management
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq/
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      start_period: 20s
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  peeling_system_python:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+
+  monitoring_system_java:
+    build:
+      context: .
+      dockerfile: Dockerfile.java
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
