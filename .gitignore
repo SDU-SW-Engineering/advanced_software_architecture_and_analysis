@@ -447,3 +447,5 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 # End of https://github.com/github/gitignore/blob/main/Maven.gitignore
+
+main.pdf
