@@ -18,7 +18,6 @@ public class Main {
         // todo: Subsystem peeler should have updated state based on the message
         // received
         Subsystem peeler = new Subsystem(SubsystemType.PEELER);
-
         MessageHandler.listenToMessages();
     }
 }

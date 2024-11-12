@@ -9,7 +9,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-public class MessageHandler {
+abstract class MessageHandler {
     private final static String QUEUE_NAME = "peeling_machine";
     private final static Boolean DURABLE_QUEUE = false;
 
@@ -34,14 +34,10 @@ public class MessageHandler {
     private final static DeliverCallback deliverCallback = (consumerTag, delivery) -> {
         String message = new String(delivery.getBody(), "UTF-8");
         System.out.println("Just Received '" + message + "' message.");
-        saveMessageToDatabase(message);
+        Message.handleMessage(message);
     };
 
     private final static CancelCallback cancelCallback = (consumerTag) -> {
         System.out.println("Consumer monitoring system for the peeling machine (" + consumerTag + ") stopped.");
     };
-
-    private static void saveMessageToDatabase(String message) {
-        // This is probably for you LARA
-    }
 }

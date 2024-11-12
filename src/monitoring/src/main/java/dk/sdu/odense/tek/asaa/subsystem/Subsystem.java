@@ -6,7 +6,7 @@ public class Subsystem {
     private State currentState;
 
     public Subsystem(SubsystemType type) {
-        this.id = 1;
+        this.id = 1; // we will probably generate this with the database right?
         this.type = type;
         this.currentState = State.UNKNOWN;
     }
