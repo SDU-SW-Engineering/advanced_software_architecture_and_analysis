@@ -449,3 +449,5 @@ buildNumber.properties
 # End of https://github.com/github/gitignore/blob/main/Maven.gitignore
 
 main.pdf
+
+.metadata/
