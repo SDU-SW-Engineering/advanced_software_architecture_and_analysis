@@ -2,6 +2,8 @@ import random
 import asyncio
 
 from messaging import send_message
+from src.peeler.messaging import send_message_with_code
+from src.peeler.states import State
 from weighing import weigh_apple, weigh_fast_peel, weigh_thorough_peel, weigh_orange, weigh_fast_zest, weigh_thorough_zest
 from cleaning import clean
 
@@ -84,7 +86,7 @@ async def clean_every_thirty_seconds() -> None:
         await clean()
 
 async def idle() -> None:
-    send_message("The device is idle")
+    send_message_with_code("The device is idle", State.IDLE)
     time = random.randint(1, 5)
     await asyncio.sleep(time)
     print(f"This device was idle for {time} seconds")

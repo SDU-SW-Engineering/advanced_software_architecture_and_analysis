@@ -6,16 +6,23 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import dk.sdu.odense.tek.asaa.subsystem.State;
+import dk.sdu.odense.tek.asaa.subsystem.Subsystems;
 
 public class Message {
     private long id;
     private String message;
     private long subsystemID;
+    private Instant sendOutTimestamp;
     private Instant timestamp;
 
     private Message(String message) {
         // todo: assign ID and subsystemID
-        this.message = message;
+        String[] parsedMessage = message.split(";");
+        this.message = parsedMessage[0];
+        this.subsystemID = Long.parseLong(parsedMessage[1]);
+        Subsystems.getSubsystem(subsystemID).setCurrentState(State.valueOf(parsedMessage[2]));
+        this.sendOutTimestamp = Instant.parse(parsedMessage[3]);
         this.timestamp = Instant.now();
     }
 
@@ -42,6 +49,7 @@ public class Message {
                 "id=" + id +
                 ", message='" + message + '\'' +
                 ", subsystemID=" + subsystemID +
+                ", sendOutTimestamp=" + sendOutTimestamp +
                 ", timestamp=" + timestamp +
                 '}';
     }

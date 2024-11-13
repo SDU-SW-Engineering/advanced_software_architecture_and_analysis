@@ -4,11 +4,19 @@ public class Subsystem {
     private final long id;
     private SubsystemType type;
     private State currentState;
+    private static long idCounter = 0;
 
-    public Subsystem(SubsystemType type) {
-        this.id = 1; // we will probably generate this with the database right?
+    public Subsystem(long id, SubsystemType type) {
+        this.id = id;
         this.type = type;
         this.currentState = State.UNKNOWN;
+        idCounter++;
+        Subsystems.addSubsystem(this);
+    }
+
+
+    public long getId() {
+        return id;
     }
 
     public void setCurrentState(State state) {
