@@ -46,7 +46,6 @@ async def process_cycle() -> None:
                 await fast_zest()
             else:
                 await thorough_zest()
-    return
 
 async def go_fast() -> None:
     await peeling_mode_queue.put("fast")

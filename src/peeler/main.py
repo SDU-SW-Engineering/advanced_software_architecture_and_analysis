@@ -17,14 +17,13 @@ async def turn_off() -> None:
     await stop_processing()
 
 async def main() -> None:
-    establish_message_queue()
-
     task = asyncio.create_task(start_processing())
     await asyncio.sleep(5)
     await go_thorough()
     await asyncio.sleep(5)
     await stop_processing()
     await task
+    
     close_connection()
 
 if __name__ == "__main__":
