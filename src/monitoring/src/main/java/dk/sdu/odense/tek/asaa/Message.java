@@ -61,9 +61,11 @@ public class Message {
 
     private static void storeMessageToDatabase(Message message) {
         try {
-            PreparedStatement statement = DataBaseConnection.getDataSource().getConnection()
+            PreparedStatement statement = DataBaseConnection
+                    .getDataSource()
+                    .getConnection()
                     .prepareStatement(
-                            "INSERT INTO message_log( message, systemid, messageReceivedTimestamp) VALUES ( ?, ?, ?)");
+                            "INSERT INTO message_log( messageBody, systemId, messageSent, messageReceived) VALUES ( ?, ?, ?, ?)");
 
             LocalDateTime datetimeSent = LocalDateTime.ofInstant(message.getMessageSentTimestamp(), ZoneOffset.UTC);
             String datetimeSentString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS").format(datetimeSent);
@@ -81,6 +83,7 @@ public class Message {
             int insertedRows = statement.executeUpdate();
 
         } catch (SQLException e) {
+            System.err.print("An exception occurred: ");
             e.printStackTrace();
         }
     }
