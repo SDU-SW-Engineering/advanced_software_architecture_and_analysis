@@ -1,11 +1,12 @@
 package dk.sdu.odense.tek.asaa;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import dk.sdu.odense.tek.asaa.subsystem.SubsystemType;
+import dk.sdu.odense.tek.asaa.subsystem.Subsystems;
 import dk.sdu.odense.tek.asaa.subsystem.Subsystem;
 
 /**
@@ -17,11 +18,13 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, TimeoutException {
-        // todo: Subsystem peeler should have updated state based on the message
-        // received
-        new Subsystem(0, SubsystemType.PEELER);
-        new Subsystem(1, SubsystemType.CONVEYBELT);
-        new Subsystem(2, SubsystemType.SQUEEZER);
+
+        List<Subsystem> currentSubsystems = Arrays.asList(
+                new Subsystem(SubsystemType.PEELER),
+                new Subsystem(SubsystemType.CONVEYBELT),
+                new Subsystem(SubsystemType.SQUEEZER));
+
+        Subsystems.addSubsystems(currentSubsystems);
 
         MessageHandler.listenToMessages();
     }

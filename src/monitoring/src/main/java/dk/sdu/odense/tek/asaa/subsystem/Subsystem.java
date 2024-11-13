@@ -6,20 +6,25 @@ public class Subsystem {
     private State currentState;
     private static long idCounter = 0;
 
-    public Subsystem(long id, SubsystemType type) {
-        this.id = id;
+    public Subsystem(SubsystemType type) {
+        this.id = idCounter++;
         this.type = type;
         this.currentState = State.UNKNOWN;
-        idCounter++;
-        Subsystems.addSubsystem(this);
     }
-
 
     public long getId() {
         return id;
     }
 
+    public State getCurrentState() {
+        return currentState;
+    }
+
     public void setCurrentState(State state) {
         this.currentState = state;
+    }
+
+    public SubsystemType getSubsystemType() {
+        return type;
     }
 }

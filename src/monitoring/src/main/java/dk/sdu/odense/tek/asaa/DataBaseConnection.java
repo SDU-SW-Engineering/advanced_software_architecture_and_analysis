@@ -2,7 +2,7 @@ package dk.sdu.odense.tek.asaa;
 
 import org.postgresql.ds.PGSimpleDataSource;
 
-public class DataBaseConnection {
+public abstract class DataBaseConnection {
 	private static final String url = "jdbc:postgresql://postgres:5432/monitoring?user=postgres&password=juicelizzo";
 	private static PGSimpleDataSource dataSource;
 
