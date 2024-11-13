@@ -1,4 +1,36 @@
 services:
+  peeling_system_python:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+      postgres:
+        condition: service_healthy
+        restart: true
+
+  monitoring_system_java:
+    build:
+      context: .
+      dockerfile: Dockerfile.java
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+      postgres:
+        condition: service_healthy
+        restart: true
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: 'rabbitmq'
@@ -15,28 +47,20 @@ services:
       timeout: 10s
       retries: 5
 
-  peeling_system_python:
-    build:
-      context: .
-      dockerfile: Dockerfile.python
+  postgres:
+    image: postgres
     environment:
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_PORT=5672
-    restart: on-failure
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-        restart: true
-
-  monitoring_system_java:
-    build:
-      context: .
-      dockerfile: Dockerfile.java
-    environment:
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_PORT=5672
-    restart: on-failure
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-        restart: true
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: juicelizzo
+      POSTGRES_DB: monitoring
+    ports:
+      - 5432:5432
+    volumes:
+      - "./postgres/postgres.conf:/usr/local/etc/postgres/postgres.conf"
+      - "./postgres/data:/var/lib/postgresql/data:delegated"
+      - ./db_init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres -U postgres" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
