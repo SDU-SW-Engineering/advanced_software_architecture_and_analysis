@@ -1,6 +1,5 @@
 import random
 from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
 
 cluster = MongoClient("mongodb+srv://admin:admin123@cluster0.k0olb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db= cluster["peeling_system"]

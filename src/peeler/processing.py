@@ -1,9 +1,8 @@
 import random
 import asyncio
 
-from messaging import send_message
-from src.peeler.messaging import send_message_with_code
-from src.peeler.states import State
+from messaging import send_message_with_code
+from states import State
 from weighing import weigh_apple, weigh_fast_peel, weigh_thorough_peel, weigh_orange, weigh_fast_zest, weigh_thorough_zest
 from cleaning import clean
 

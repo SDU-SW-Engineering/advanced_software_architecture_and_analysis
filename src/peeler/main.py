@@ -2,10 +2,9 @@ import asyncio
 import os
 import sys
 
-from messaging import establish_message_queue
 from processing import start_processing, stop_processing, go_thorough
 from states import State
-from src.peeler.messaging import send_message_with_code, close_connection
+from messaging import send_message_with_code, close_connection
 
 
 async def turn_on() -> None:
