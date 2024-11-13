@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS message_log (
     id SERIAL PRIMARY KEY,
-    message VARCHAR(255) NOT NULL,
+    messageBody VARCHAR(255) NOT NULL,
     systemId VARCHAR(50) NOT NULL,
-    timestamp VARCHAR(255) NOT NULL
+    messageSent VARCHAR(255) NOT NULL
+    messageReceived VARCHAR(255) NOT NULL
 );

@@ -13,17 +13,18 @@ public class Message {
     private long id;
     private String message;
     private long subsystemID;
-    private Instant sendOutTimestamp;
-    private Instant timestamp;
+    private Instant messageSentTimestamp;
+    private Instant messageReceivedTimestamp;
 
     private Message(String message) {
-        // todo: assign ID and subsystemID
         String[] parsedMessage = message.split(";");
+
         this.message = parsedMessage[0];
         this.subsystemID = Long.parseLong(parsedMessage[1]);
+        this.messageSentTimestamp = Instant.parse(parsedMessage[3]);
+        this.messageReceivedTimestamp = Instant.now();
+
         Subsystems.getSubsystem(subsystemID).setCurrentState(State.valueOf(parsedMessage[2]));
-        this.sendOutTimestamp = Instant.parse(parsedMessage[3]);
-        this.timestamp = Instant.now();
     }
 
     public static void handleMessage(String messageString) {
@@ -39,8 +40,12 @@ public class Message {
         return subsystemID;
     }
 
-    public Instant getTimestamp() {
-        return timestamp;
+    public Instant getMessageReceivedTimestamp() {
+        return messageReceivedTimestamp;
+    }
+
+    public Instant getMessageSentTimestamp() {
+        return messageSentTimestamp;
     }
 
     @Override
@@ -49,22 +54,29 @@ public class Message {
                 "id=" + id +
                 ", message='" + message + '\'' +
                 ", subsystemID=" + subsystemID +
-                ", sendOutTimestamp=" + sendOutTimestamp +
-                ", timestamp=" + timestamp +
+                ", sendTimestamp=" + messageSentTimestamp +
+                ", messageReceivedTimestamp=" + messageReceivedTimestamp +
                 '}';
     }
 
     private static void storeMessageToDatabase(Message message) {
         try {
             PreparedStatement statement = DataBaseConnection.getDataSource().getConnection()
-                    .prepareStatement("INSERT INTO message_log( message, systemid, timestamp) VALUES ( ?, ?, ?)");
+                    .prepareStatement(
+                            "INSERT INTO message_log( message, systemid, messageReceivedTimestamp) VALUES ( ?, ?, ?)");
 
-            LocalDateTime datetime = LocalDateTime.ofInstant(message.getTimestamp(), ZoneOffset.UTC);
-            String formatted = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss").format(datetime);
+            LocalDateTime datetimeSent = LocalDateTime.ofInstant(message.getMessageSentTimestamp(), ZoneOffset.UTC);
+            String datetimeSentString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS").format(datetimeSent);
+
+            LocalDateTime datetimeReceived = LocalDateTime.ofInstant(message.getMessageReceivedTimestamp(),
+                    ZoneOffset.UTC);
+            String datetimeReceivedString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS")
+                    .format(datetimeReceived);
 
             statement.setString(1, message.getMessage());
             statement.setLong(2, message.getSubsystemID());
-            statement.setString(3, formatted);
+            statement.setString(3, datetimeSentString);
+            statement.setString(4, datetimeReceivedString);
 
             int insertedRows = statement.executeUpdate();
 
