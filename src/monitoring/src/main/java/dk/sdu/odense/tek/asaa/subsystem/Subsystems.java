@@ -18,6 +18,7 @@ public abstract class Subsystems {
     }
 
     public static Subsystem getSubsystem(long id) {
+        System.out.println(subsystems);
         return subsystems.get(id);
     }
 

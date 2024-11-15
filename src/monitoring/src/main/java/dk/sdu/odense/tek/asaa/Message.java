@@ -11,20 +11,26 @@ import dk.sdu.odense.tek.asaa.subsystem.Subsystems;
 
 public class Message {
     private long id;
-    private String message;
+    private String messageBody;
     private long subsystemID;
-    private Instant messageSentTimestamp;
-    private Instant messageReceivedTimestamp;
+    private LocalDateTime messageSentTimestamp;
+    private LocalDateTime messageReceivedTimestamp;
 
     private Message(String message) {
         String[] parsedMessage = message.split(";");
 
-        this.message = parsedMessage[0];
+        this.messageBody = parsedMessage[0];
         this.subsystemID = Long.parseLong(parsedMessage[1]);
-        this.messageSentTimestamp = Instant.parse(parsedMessage[3]);
-        this.messageReceivedTimestamp = Instant.now();
 
-        Subsystems.getSubsystem(subsystemID).setCurrentState(State.valueOf(parsedMessage[2]));
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+
+        this.messageSentTimestamp = LocalDateTime.parse(parsedMessage[3], inputFormatter);
+        this.messageReceivedTimestamp = LocalDateTime.ofInstant(Instant.now(),
+                ZoneOffset.UTC);
+
+        
+        int stateCode = Integer.parseInt(parsedMessage[2]);
+        Subsystems.getSubsystem(subsystemID).setCurrentState(State.fromCode(stateCode));
     }
 
     public static void handleMessage(String messageString) {
@@ -32,27 +38,11 @@ public class Message {
         storeMessageToDatabase(message);
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public long getSubsystemID() {
-        return subsystemID;
-    }
-
-    public Instant getMessageReceivedTimestamp() {
-        return messageReceivedTimestamp;
-    }
-
-    public Instant getMessageSentTimestamp() {
-        return messageSentTimestamp;
-    }
-
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", message='" + message + '\'' +
+                ", message='" + messageBody + '\'' +
                 ", subsystemID=" + subsystemID +
                 ", sendTimestamp=" + messageSentTimestamp +
                 ", messageReceivedTimestamp=" + messageReceivedTimestamp +
@@ -67,16 +57,13 @@ public class Message {
                     .prepareStatement(
                             "INSERT INTO message_log( messageBody, systemId, messageSent, messageReceived) VALUES ( ?, ?, ?, ?)");
 
-            LocalDateTime datetimeSent = LocalDateTime.ofInstant(message.getMessageSentTimestamp(), ZoneOffset.UTC);
-            String datetimeSentString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS").format(datetimeSent);
+            String datetimeSentString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS").format(message.messageSentTimestamp);
 
-            LocalDateTime datetimeReceived = LocalDateTime.ofInstant(message.getMessageReceivedTimestamp(),
-                    ZoneOffset.UTC);
             String datetimeReceivedString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS")
-                    .format(datetimeReceived);
+                    .format(message.messageReceivedTimestamp);
 
-            statement.setString(1, message.getMessage());
-            statement.setLong(2, message.getSubsystemID());
+            statement.setString(1, message.messageBody);
+            statement.setLong(2, message.subsystemID);
             statement.setString(3, datetimeSentString);
             statement.setString(4, datetimeReceivedString);
 

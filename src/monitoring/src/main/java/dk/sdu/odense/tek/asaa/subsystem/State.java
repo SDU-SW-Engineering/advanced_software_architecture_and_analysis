@@ -16,4 +16,13 @@ public enum State {
     public int getCode() {
         return code;
     }
+
+    public static State fromCode(int code) {
+        for (State state : State.values()) {
+            if (state.getCode() == code) {
+                return state;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with code " + code);
+    }
 }

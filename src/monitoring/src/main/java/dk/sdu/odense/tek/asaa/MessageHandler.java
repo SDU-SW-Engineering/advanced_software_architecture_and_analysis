@@ -35,6 +35,7 @@ abstract class MessageHandler {
         String message = new String(delivery.getBody(), "UTF-8");
         System.out.println("Just Received '" + message + "' message.");
         Message.handleMessage(message);
+        
     };
 
     private final static CancelCallback cancelCallback = (consumerTag) -> {
