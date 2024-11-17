@@ -8,13 +8,14 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import dk.sdu.odense.tek.asaa.subsystem.State;
 import dk.sdu.odense.tek.asaa.subsystem.Subsystems;
+import dk.sdu.odense.tek.asaa.subsystem.Experiment;
 
 public class Message {
     private long id;
     private String messageBody;
     private long subsystemID;
-    private LocalDateTime messageSentTimestamp;
-    private LocalDateTime messageReceivedTimestamp;
+    private LocalDateTime sentTimestamp;
+    private LocalDateTime receivedTimestamp;
 
     private Message(String message) {
         String[] parsedMessage = message.split(";");
@@ -24,18 +25,21 @@ public class Message {
 
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
-        this.messageSentTimestamp = LocalDateTime.parse(parsedMessage[3], inputFormatter);
-        this.messageReceivedTimestamp = LocalDateTime.ofInstant(Instant.now(),
+        this.sentTimestamp = LocalDateTime.parse(parsedMessage[3], inputFormatter);
+        this.receivedTimestamp = LocalDateTime.ofInstant(Instant.now(),
                 ZoneOffset.UTC);
 
         
         int stateCode = Integer.parseInt(parsedMessage[2]);
         Subsystems.getSubsystem(subsystemID).setCurrentState(State.fromCode(stateCode));
+        System.out.println(Subsystems.getSubsystem(subsystemID).getCurrentState());
+        System.out.println(receivedTimestamp.toString() + sentTimestamp.toString());
     }
 
     public static void handleMessage(String messageString) {
         Message message = new Message(messageString);
         storeMessageToDatabase(message);
+        Experiment.writeToCSV(message);
     }
 
     @Override
@@ -44,8 +48,8 @@ public class Message {
                 "id=" + id +
                 ", message='" + messageBody + '\'' +
                 ", subsystemID=" + subsystemID +
-                ", sendTimestamp=" + messageSentTimestamp +
-                ", messageReceivedTimestamp=" + messageReceivedTimestamp +
+                ", sendTimestamp=" + sentTimestamp +
+                ", messageReceivedTimestamp=" + receivedTimestamp +
                 '}';
     }
 
@@ -57,10 +61,10 @@ public class Message {
                     .prepareStatement(
                             "INSERT INTO message_log( messageBody, systemId, messageSent, messageReceived) VALUES ( ?, ?, ?, ?)");
 
-            String datetimeSentString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS").format(message.messageSentTimestamp);
+            String datetimeSentString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS").format(message.sentTimestamp);
 
             String datetimeReceivedString = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.SSS")
-                    .format(message.messageReceivedTimestamp);
+                    .format(message.receivedTimestamp);
 
             statement.setString(1, message.messageBody);
             statement.setLong(2, message.subsystemID);
@@ -73,5 +77,17 @@ public class Message {
             System.err.print("An exception occurred: ");
             e.printStackTrace();
         }
+    }
+
+    public LocalDateTime getSentTimestamp() {
+        return sentTimestamp;
+    }
+
+    public LocalDateTime getReceivedTimestamp() {
+        return receivedTimestamp;
+    }
+
+    public String getMessageBody() {
+        return messageBody;
     }
 }

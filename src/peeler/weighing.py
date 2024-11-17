@@ -12,7 +12,7 @@ def weigh_apple() :
 def weigh_fast_peel() -> None:
     weight = random.uniform(10, 35)
     apple_weight = weigh_apple()
-    print(f"Weighing a peel: {weight:.2f} grams, Weighing an apple: {apple_weight()} grams")
+    print(f"Weighing a peel: {weight:.2f} grams, Weighing an apple: {apple_weight} grams")
     resource = {"name": "apple", "weight": apple_weight, "waste_weight": weight}
     collection.insert_one(resource)
     return

@@ -21,13 +21,7 @@ async def start_processing() -> None:
 async def stop_processing() -> None:
     print("Stopping processing")
     global __processing_event__
-    if __processing_event__.is_set():
-        __processing_event__.cancel()
-        try:
-            await __processing_event__
-        except asyncio.CancelledError:
-            pass
-        __processing_event__ = None
+    __processing_event__.clear()
 
 """
 This function copuld stop the processing loop immediately without letting it finish the current cycle
@@ -38,7 +32,7 @@ def emergency_stop() -> None:
 
 async def process_cycle() -> None:
     global __peeling_mode_queue__
-    if random.random() < 0.005:
+    if random.random() < 0.05:
         await idle()
     else:
         is_apple = random.choice([True, False])
@@ -54,6 +48,7 @@ async def process_cycle() -> None:
                 await fast_zest()
             else:
                 await thorough_zest()
+    return
 
 async def go_fast() -> None:
     global __peeling_mode_queue__
@@ -97,7 +92,7 @@ async def clean_every_thirty_seconds() -> None:
 
 async def idle() -> None:
     send_message_with_code("The device is idle", State.IDLE)
-    time = random.randint(1, 5)
+    time = random.randint(5, 15)
     await asyncio.sleep(time)
     send_message_with_code("The device is running", State.RUNNING)
     print(f"This device was idle for {time} seconds")

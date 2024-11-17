@@ -16,13 +16,14 @@ async def turn_off() -> None:
     await stop_processing()
 
 async def main() -> None:
-    await turn_on()
-    await asyncio.sleep(5)
+    task = asyncio.create_task(turn_on())
+    await asyncio.sleep(120)
     await go_thorough()
-    await asyncio.sleep(5)
+    await asyncio.sleep(120)
     await go_fast()
-    await asyncio.sleep(5)
+    await asyncio.sleep(60)
     await turn_off()
+    await task
     
     close_connection()
 
