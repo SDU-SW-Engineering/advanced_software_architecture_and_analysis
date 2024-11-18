@@ -23,7 +23,6 @@ async def main() -> None:
     await go_fast()
     await asyncio.sleep(60)
     await turn_off()
-    await task
     
     close_connection()
 
