@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="m-3">
+
+    <div class="row d-flex align-items-center">
+
+        <div class="col-md-6">
+            <img class="rounded-xl w-full h-auto img-fluid" src="{{ car.image.url }}">
+        </div>
+
+        <div class="col-md-6 pt-32">
+
+            <h2>{{ car.title }}</h2>
+            <p class="pt-4 text-sm">{{ car.description }}</p>
+
+            <p id="price-display" class="text-lg">
+                ${{ default_variant.car_price }}
+            </p>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label><b>Model</b></label>
+                    <select id="select-model" class="form-control">
+                        {% for m in models %}
+                            <option value="{{ m }}"
+                                {% if m == default_variant.car_model %}selected{% endif %}>
+                                {{ m }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label><b>Engine</b></label>
+                    <select id="select-engine" class="form-control">
+                        {% for e in engines %}
+                            <option value="{{ e }}"
+                                {% if e == default_variant.car_engine %}selected{% endif %}>
+                                {{ e }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label><b>Color</b></label>
+                    <select id="select-color" class="form-control">
+                        {% for c in colors %}
+                            <option value="{{ c }}"
+                                {% if c == default_variant.car_color %}selected{% endif %}>
+                                {{ c }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row pt-3">
+                <div class="col-md-3">
+                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                <a id="add-to-cart-btn" class="input-group-text" href="#">
+                    <i class="fas fa-plus"></i>
+                </a>
+                </div>
+                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                <div class="input-group-append">
+                <a href="/order/remove-cart-item/?car_id={{car.id}}" class="input-group-text">
+                    <i class="fas fa-minus"></i>
+                </a>
+                </div>
+                
+            </div>
+
+
+
+                </div>
+
+            </div>
+
+       
+                <a href="{% url 'cart' %}"><button class="btn btn-primary btn-lg w-25">Buy</button></a>
+
+          
+        </div>
+    </div>
+</div>
+
+<script>
+const variants = JSON.parse('{{ variant_data|safe }}');
+
+const modelSelect = document.getElementById("select-model");
+const engineSelect = document.getElementById("select-engine");
+const colorSelect  = document.getElementById("select-color");
+const priceDisplay = document.getElementById("price-display");
+const priceIdField = document.getElementById("price-id-field");
+
+function updatePrice() {
+    const m = modelSelect.value;
+    const e = engineSelect.value;
+    const c = colorSelect.value;
+
+    const match = variants.find(v =>
+        v.model === m &&
+        v.engine === e &&
+        v.color === c
+    );
+
+    if (match) {
+        priceDisplay.textContent = "$" + match.price.toFixed(2);
+        priceIdField.value = match.id;
+    }
+}
+
+modelSelect.onchange = updatePrice;
+engineSelect.onchange = updatePrice;
+colorSelect.onchange = updatePrice;
+
+document.getElementById("add-to-cart-btn").onclick = function () {
+
+    const m = modelSelect.value;
+    const e = engineSelect.value;
+    const c = colorSelect.value;
+
+    // find selected variant
+    const match = variants.find(v =>
+        v.model === m &&
+        v.engine === e &&
+        v.color === c
+    );
+
+    const url = `/order/add-to-cart/?car_id={{car.id}}`
+        + `&car_model=${m}`
+        + `&car_engine=${e}`
+        + `&car_color=${c}`
+        + `&car_price=${match ? match.price : ''}`;
+
+    window.location.href = url;
+};
+
+</script>
+
+{% endblock %}

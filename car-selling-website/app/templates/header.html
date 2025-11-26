@@ -1,0 +1,56 @@
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-2 mt-2">
+              <a class="navbar-brand" href="/">
+                <img style="height: 80px !important;" src="https://i.ibb.co/nvfwCL9/360526306-11452734.png"alt = "image of logo" class = "img-fluid "></a>
+        </div>
+        <div class = "col-md-7">
+            <div class="input-group mt-3">
+
+</div>
+        </div>
+
+
+       
+       
+<div class = "col-md-3 mt-3">
+
+
+
+
+  <a href="/order/cart/">
+            <div class ="circle float-right"onclick="window.location.href='/order/cart/';">
+                    <i class="fas fa-shopping-cart text-muted"></i>
+                 
+                    <span class="badge badge-danger">
+                      {{request.user.customer.getCartItemCount}}</span>
+                    </div>
+                  </a>
+       
+          
+
+            {% if not request.user.is_authenticated %}
+            <div class = "circle float-right mr-4">
+                    <i class="fas fa-user text-muted"data-target="#exampleModal" data-toggle="modal"></i>
+                    <span class="badge badge-danger">0</span>
+            
+            </div>
+
+            {% else %}
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" id="manageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Manage
+  </button>
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="manageDropdown">
+    <a class="dropdown-item" href="{% url 'order-list' %}">Order</a>
+    <a class="dropdown-item" href="#">Account</a>
+    <a class="dropdown-item" href="{% url 'logout_page' %}">Logout</a>
+  </div>
+</div>
+
+{% endif %}
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4" style="font-weight:700;">Your Orders</h2>
+
+{% for order in orders %}
+<div style="
+    background:#fff;
+    padding:20px;
+    margin-bottom:25px;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    border:1px solid #eee;
+">
+    <h4 style="font-weight:600; margin-bottom:15px;">
+        Order #{{ order.id }}
+        <span style="float:right; color:#1a73e8; font-weight:700;">
+            Total: {{ order.total }} ৳
+        </span>
+    </h4>
+
+    <ul style="list-style:none; padding-left:0; margin:0;">
+        {% for item in order_items %}
+            {% if item.order_id == order.id %}
+            <li style="
+                padding:12px 15px;
+                margin-bottom:10px;
+                background:#f9fafb;
+                border-radius:8px;
+                border:1px solid #e5e7eb;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+            ">
+                 <span style="font-weight:500;">
+                    {{item.car.title}}
+                </span>
+
+                <span style="font-weight:500;">
+                    {{ item.car_model }} ({{ item.car_color }} | {{ item.car_engine }})
+                </span>
+                <span style="font-weight:700; color:#2563eb;">
+                    {{ item.quantity }} × {{ item.car_price }} ৳
+                </span>
+
+                <span style="font-weight:700; color:#2563eb;">
+                    {{item.order.status}}
+                </span>
+
+            </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+
+
+{% endblock %}

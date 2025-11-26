@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-3">
+    <h3>Your Cart</h3>
+   
+    {% if cart.cart_items.all.count %}
+    <div class="row">
+      <div class="col-12 col-md-8">
+        <!-- Cart items -->
+        <hr />
+        
+        {% for item in cart.cart_items.all %}
+        <div class="cart-item py-2">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="d-flex mb-3">
+                <img
+                 style="height: 100px;"
+                  class="cart-image d-block"
+                  src="/media/{{ item.car.image }}"
+                  alt="{{ item.car.title }}"
+                />
+                <div class="mx-3">
+                  <h6>{{ item.car.title }}</h6>
+                  <small>Rs. {{ item.car_price }} (Per Item)</small>
+                  <h5>Rs. {{ item.getCartItemTotal }}</h5>
+
+                  <div class="row">
+                    <div class="col-6">
+                      <a 
+                        href="#" 
+                        class="btn btn-sm add-to-cart-btn"
+                        data-car-id="{{ item.car.id }}"
+                        data-car-model="{{ item.car_model }}"
+                        data-car-engine="{{ item.car_engine }}"
+                        data-car-color="{{ item.car_color }}"
+                        data-car-price="{{ item.car_price }}"
+                      >
+                        <i class="fas fa-plus"></i>
+                      </a>
+                    </div>
+
+                    <div class="col-6">
+                      <a 
+                        href="/order/remove-cart-item/?car_id={{ item.car.id }}" 
+                      >
+                        <i class="fas fa-minus"></i>
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div class="d-flex justify-content-between align-items-center">
+                  <button class="btn btn-success btn-sm">Quantity: {{ item.quantity }}</button>
+
+                  <a 
+                    href="/order/remove-cart-item/?car_id={{ item.car.id }}&quantity=0"
+                    class="btn btn-outline-secondary btn-sm"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <hr />
+        {% endfor %}
+
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="bg-light rounded-3 p-4 sticky-top">
+          <h6 class="mb-4">Order Summary</h6>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>Subtotal</div>
+            <div><strong>Rs. {{ cart.getCartTotal }} </strong></div>
+          </div>
+          <hr />
+          <div class="d-flex justify-content-between align-items-center">
+            <div>Total</div>
+            <div><strong>Rs. {{ cart.getCartTotal }}</strong></div>
+          </div>
+          <a href="{% url 'checkout-view' cart_id=cart.id %}">
+            <button class="btn btn-primary w-100 mt-4">Checkout</button>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+
+</div>
+
+<!-- JavaScript for + buttons -->
+<script>
+document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
+    btn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const carId = this.dataset.carId;
+        const carModel = this.dataset.carModel;
+        const carEngine = this.dataset.carEngine;
+        const carColor = this.dataset.carColor;
+        const carPrice = this.dataset.carPrice;
+
+        const url = `/order/add-to-cart/?car_id=${carId}`
+            + `&car_model=${carModel}`
+            + `&car_engine=${carEngine}`
+            + `&car_color=${carColor}`
+            + `&car_price=${carPrice}`;
+
+        window.location.href = url;
+    });
+});
+</script>
+
+{% endblock %}
