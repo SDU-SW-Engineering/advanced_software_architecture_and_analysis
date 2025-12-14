@@ -1,0 +1,18 @@
+{
+  "name": "pasta-dashboard",
+  "version": "1.0.0",
+  "description": "React Dashboard for Pasta Production Kafka Events",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/server.js",
+    "client": "cd client && npm start",
+    "install-all": "npm install && cd client && npm install"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4",
+    "ws": "^8.14.2",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "concurrently": "^8.2.2"
+  }
+}

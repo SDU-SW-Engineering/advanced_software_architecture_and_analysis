@@ -1,0 +1,7 @@
+scenario,newMachine,machineFailure,storageAlert
+5m_1k,60,5,14
+5m_2k,79,11,3
+5m_3k,115,15,6
+5m_4k,93,13,3
+3m_1k,46,6,7
+3m_2k,72,5,8

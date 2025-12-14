@@ -1,0 +1,33 @@
+===============================================================================
+LATENCY ANALYSIS SUMMARY
+===============================================================================
+
+Event Type: machineFailure
+--------------------------------------------------------------------------------
+  Total Events: 55
+  Average Scheduler Latency: 4654.98 ms (4.655 s)
+  Average Machine Latency: 2007.45 ms (2.007 s)
+  Average Total Latency: 6662.44 ms (6.662 s)
+
+Event Type: newMachine
+--------------------------------------------------------------------------------
+  Total Events: 465
+  Average Scheduler Latency: 5626.61 ms (5.627 s)
+  Average Machine Latency: 3782.79 ms (3.783 s)
+  Average Total Latency: 9409.41 ms (9.409 s)
+
+Event Type: storageAlert
+--------------------------------------------------------------------------------
+  Total Events: 41
+  Average Scheduler Latency: 3655.93 ms (3.656 s)
+  Average Machine Latency: 932.51 ms (0.933 s)
+  Average Total Latency: 4588.44 ms (4.588 s)
+
+===============================================================================
+GLOBAL STATISTICS
+===============================================================================
+  Total Events (All Types): 561
+  Average Scheduler Latency: 5387.33 ms (5.387 s)
+  Average Machine Latency: 3400.43 ms (3.400 s)
+  Average Total Latency: 8787.76 ms (8.788 s)
+===============================================================================

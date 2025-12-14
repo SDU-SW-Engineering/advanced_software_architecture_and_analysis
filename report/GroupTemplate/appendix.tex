@@ -1,0 +1,84 @@
+\clearpage
+\onecolumn
+\appendices
+\section{}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{../../images/percentage_by_eventtype.png}
+    \caption{Experimental data viewed in histogram counted by event type in percentage}
+    \label{fig:system-architecture}
+\end{figure}
+\begin{table}[h]
+    \centering
+    \caption{Functional Requirements}
+    \label{tab:req-functional}
+    \resizebox{0.8\textwidth}{!}{%
+    \begin{tabular}{llp{10cm}l}
+        \hline
+        ID & Name & Description & Priority \\
+        \hline
+        FR-1  & Fresh Pasta A Production     & The system shall produce fresh pasta of type A & High \\
+        FR-2  & Dried Pasta A Production     & The system shall produce dried pasta of type A & High \\
+        FR-3  & Fresh Pasta B Production     & The system shall produce fresh pasta of type B & High \\
+        FR-4  & Dried Pasta B Production     & The system shall produce dried pasta of type B & High \\
+        FR-6  & Machine Heartbeats           & Each machine shall communicate if it's working correctly using heartbeats & High \\
+        FR-7  & Scheduler Checks Heartbeats  & The scheduler checks the heartbeats and checks if there are missing or new ones. & High \\
+        FR-11 & Product Packaging Time       & The system shall have the product packaged in less than 10 seconds & Medium \\
+        FR-12 & Product Sorting              & The sorting system shall configure whether the product must go to the drying machine or directly to packaging & High \\
+        FR-13 & Production Plan Modification & When the production plan gets modified, the machine should react in $\leq$ 10 seconds & High \\
+        FR-14 & Storage Limit Notification   & When storage exceeds the limit for product A or B, the DB should inform the scheduler in $\leq$ 5 seconds & High \\
+        FR-15 & Storage Threshold Cooldown   & After switching blade to a cutting machine, it must ignore repeated threshold triggers for 5 seconds & High \\
+        \hline
+    \end{tabular}%
+    }
+\end{table}
+\begin{table}[h]
+    \centering
+    \caption{Non-Functional Requirements}
+    \label{tab:req-nonfunctional}
+    \resizebox{0.8\textwidth}{!}{%
+    \begin{tabular}{llll}
+        \hline
+        ID & Name & Description & Priority \\
+        \hline
+        NFR-5  & Production Modifiability     & The system shall adjust production based on the current system state & High \\
+        NFR-8  & Software Deployability       & The system shall allow software updates with minimal downtime & High \\
+        NFR-9  & System Scalability           & The system shall support adding new machines without redesign. & High \\
+        NFR-10 & System Availability          & The system must operate continuously 24/7 with an uptime of at least 99.9\% & High \\
+        NFR-16 & System Maintainability       & The system shall support modular replacement of devices without downtime. & High \\
+        NFR-17 & Security                     & All external accesses must be secured & Medium \\
+        NFR-18 & Audit Trail                  & All operator actions in the system shall be logged for auditing. & High \\
+        NFR-19 & Message Reliability          & All messages between devices and the bus must be delivered at least once. & Medium \\
+        \hline
+    \end{tabular}%
+    }
+\end{table}
+\begin{table}[h]
+    \centering
+    \caption{Contribution Table}
+    \label{tab:contribution-table}
+    \large
+    \resizebox{0.8\textwidth}{!}{%
+    \begin{tabular}{|l|l|l|l|p{5cm}|}
+        \hline
+        & Aljaz & Anders & Dimitrios & Leonardo \\
+        \hline
+        Use Cases \& Requirements & \checkmark & \checkmark & \checkmark & \checkmark \\
+        \hline
+        Architecture & \checkmark & \checkmark & \checkmark & \checkmark \\
+        \hline
+        EAST-ADL & Features Deinition, Feature Diagram & Behaviour Diagram & Feature Definition, Feature Diagram & Behaviour Diagram \\
+        \hline
+        Pitch & & Main Presenter & & Second Presenter \\
+        \hline
+        UPPAAL & & Helper & & Main Developer \\
+        \hline
+        Experiment & Dashboard & Experiment Evaluation & DB & Scheduler, CuttingMachines, SortingSubsystem \& Experiment Runner \\
+        \hline
+        Second Pitch & \checkmark & \checkmark & \checkmark & \checkmark \\
+        \hline
+        Report & \checkmark & \checkmark\checkmark & \checkmark & \checkmark \\
+        \hline
+    \end{tabular}%
+    }
+\end{table}

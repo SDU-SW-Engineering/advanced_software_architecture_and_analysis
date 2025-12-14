@@ -15,8 +15,8 @@ on:
 env:
   PACKAGE_REGISTRY_TO_USE: thmork
   DOCKER_IMAGE_NAME: lowercase-name-dockerimage
-  PROJECT_NAME: ProjectName
-  GROUP_NUMBER: GroupNumber #I.e  Group02
+  PROJECT_NAME: LAJA
+  GROUP_NUMBER: Group08 #I.e  Group02
 
 jobs:
   # Create artifact of repository source code to use for consistensy accross all jobs
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: ./src # Replace with path to your compiled artifact
+          path: src/README.md # Replace with path to your compiled artifact
   
   # Job for testing the application i.e 
   test-application:
